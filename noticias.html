@@ -21,11 +21,12 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a class="nav-link" href="index.html#inicio">Inicio</a></li>
-          <li class="nav-item"><a class="nav-link" href="index.html#servicios">Servicios</a></li>
-          <li class="nav-item"><a class="nav-link" href="index.html#cursos">Cursos</a></li>
-          <li class="nav-item"><a class="nav-link" href="index.html#nosotros">Nosotros</a></li>
-          <li class="nav-item"><a class="nav-link" href="index.html#contacto">Contacto</a></li>
+          <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
+          <li class="nav-item"><a class="nav-link" href="servicios.html">Servicios</a></li>
+          <li class="nav-item"><a class="nav-link" href="cursos.html">Cursos</a></li>
+          <li class="nav-item"><a class="nav-link" href="noticias.html">Noticias</a></li>
+          <li class="nav-item"><a class="nav-link" href="nosotros.html">Nosotros</a></li>
+          <li class="nav-item"><a class="nav-link" href="contacto.html">Contacto</a></li>
         </ul>
       </div>
     </div>
@@ -44,34 +45,38 @@
   </section>
 
   <script>
-    async function cargarNoticias() {
-      const newsContainer = document.getElementById("newsContainer");
-      try {
-        const noticiasResponse = await fetch("noticias/noticias.json");
-        const noticiasData = await noticiasResponse.json();
-        const noticias = noticiasData.noticias;
+  async function cargarNoticias() {
+    const newsContainer = document.getElementById("newsContainer");
+    try {
+      const noticiasResponse = await fetch("noticias/noticias.json");
+      const noticiasData = await noticiasResponse.json();
+      const noticias = noticiasData.noticias;
 
-        for (let noticia of noticias) {
-          const response = await fetch(`noticias/${noticia}/info.json`);
-          const data = await response.json();
+      for (let noticia of noticias) {
+        const response = await fetch(`noticias/${noticia}/info.json`);
+        const data = await response.json();
 
-          const newsCard = document.createElement("div");
-          newsCard.classList.add("news-card");
-          newsCard.innerHTML = `
-            <img src="noticias/${noticia}/${data.imagen}" alt="${data.titulo}">
-            <h3>${data.titulo}</h3>
-            <p>${data.descripcion}</p>
-            <a href="noticias/${noticia}/${data.pdf}" download class="btn2">Descargar PDF</a>
-          `;
-          newsContainer.appendChild(newsCard);
-        }
-      } catch (error) {
-        console.error("Error al cargar las noticias:", error);
+        const isPDF = data.pdf.trim().toLowerCase().endsWith(".pdf");
+        const botonTexto = isPDF ? "Descargar PDF" : "Ver más";
+        const atributo = isPDF ? 'download' : 'target="_blank"';
+
+        const newsCard = document.createElement("div");
+        newsCard.classList.add("news-card");
+        newsCard.innerHTML = `
+          <img src="noticias/${noticia}/${data.imagen}" alt="${data.titulo}">
+          <h3>${data.titulo}</h3>
+          <p>${data.descripcion}</p>
+          <a href="${isPDF ? "noticias/" + noticia + "/" + data.pdf : data.pdf}" class="btn2" ${atributo}>${botonTexto}</a>
+        `;
+        newsContainer.appendChild(newsCard);
       }
+    } catch (error) {
+      console.error("Error al cargar las noticias:", error);
     }
+  }
 
-    cargarNoticias();
-  </script>
+  cargarNoticias();
+</script>
 
   <!-- FOOTER -->
   <footer class="text-center py-4">
