@@ -171,42 +171,29 @@ footer svg:hover {
   margin-bottom: 15px;
 }
 
-#afiliacion a.btn-main {
+#afiliacion .btn-main {
   background-color: #da5a6d;
   color: white;
   padding: 10px 20px;
   border-radius: 8px;
-  text-decoration: none;
-}
-
-#afiliacion a.btn-main:hover {
-  background-color: #096392;
-  color: white;
-}
-
-#afiliacion .btn-main {
-  background-color: #da5a6d;
-  color: white;
   border: none;
+  cursor: pointer;
+  font-size: 1rem; /* Tamaño de fuente consistente */
 }
 
 #afiliacion .btn-main:hover {
   background-color: #265a92;
   color: white;
 }
+
 #afiliacion .btn-secondary {
   background-color: #6c757d;
   color: white;
   padding: 10px 20px;
   border-radius: 8px;
-  text-decoration: none;
   border: none;
   cursor: pointer;
-}
-
-#afiliacion .btn-secondary:hover {
-  background-color: #5a6268;
-  color: white;
+  font-size: 1rem; /* Tamaño de fuente consistente */
 }
 
 #afiliacion .btn-secondary:hover {

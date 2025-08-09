@@ -6,7 +6,6 @@
   <title>Afiliación - APATecno</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
-  
 </head>
 <body>
   <!-- NAVBAR -->
@@ -34,7 +33,7 @@
   </nav>
 
   <!-- CONTENIDO DE AFILIACIÓN -->
-  <section class="container my-5 affiliation-section">
+  <section id="afiliacion" class="container my-5">
     <h2 class="text-center section-title">Afiliación APATecno</h2>
     <p class="text-center">La afiliación está destinada a estudiantes y profesionales de carreras afines a la informática.</p>
     <p class="text-center">Si querés conocer los costos de afiliación y todos los beneficios que ofrecemos, te invitamos a completar el siguiente formulario.</p>
@@ -56,6 +55,10 @@
       <div class="mb-3">
         <label for="cuil" class="form-label">CUIL/CUIT (Sin guiones, solo números) *</label>
         <input type="number" class="form-control" id="cuil" required>
+      </div>
+      <div class="mb-3">
+        <label for="email" class="form-label">Correo Electrónico <span class="text-danger">*</span></label>
+        <input type="email" class="form-control" id="email" required>
       </div>
       <div class="mb-3">
         <label for="domicilioReal" class="form-label">Domicilio Real *</label>
@@ -101,8 +104,8 @@
 
     <!-- Nota sobre envío -->
     <br>
-    <div class="note-section">      
-      <p><strong>FORMULARIO, DNI, TITULO, CONSTANCIA DE CUIL </strong> DEBE SER DIGITALIZADA POR ARCHIVOS INDIVIDUALES EN PDF Y ENVIADA AL CORREO INSTITUCIONAL: <strong>info@apatecno.com.ar</strong></p>
+    <div class="note-section">
+      <p><strong>FORMULARIO, DNI, TÍTULO, CONSTANCIA DE CUIL</strong> DEBE SER DIGITALIZADA POR ARCHIVOS INDIVIDUALES EN PDF Y ENVIADA AL CORREO INSTITUCIONAL: <strong>info@apatecno.com.ar</strong></p>
     </div>
   </section>
 
@@ -152,6 +155,7 @@
       const nombre = document.getElementById('nombre').value;
       const dni = document.getElementById('dni').value;
       const cuil = document.getElementById('cuil').value;
+      const email = document.getElementById('email').value;
       const domicilioReal = document.getElementById('domicilioReal').value;
       const domicilioLegal = document.getElementById('domicilioLegal').value;
       const telefonoFijo = document.getElementById('telefonoFijo').value;
@@ -160,12 +164,18 @@
       const otroTitulo = document.getElementById('otroTitulo').value;
 
       // Validar campos obligatorios
-      if (!apellido || !nombre || !dni || !cuil || !domicilioReal || !telefonoCelular || !titulo) {
+      if (!apellido || !nombre || !dni || !cuil || !email || !domicilioReal || !telefonoCelular || !titulo) {
         alert('Por favor, completa todos los campos obligatorios (*).');
         return;
       }
       if (titulo === 'Otro' && !otroTitulo) {
         alert('Por favor, especifica el título en el campo "Otro".');
+        return;
+      }
+      // Validar formato de email
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        alert('Por favor, ingresa un correo electrónico válido.');
         return;
       }
 
@@ -182,6 +192,8 @@
       doc.text(`Nro de Documento: ${dni}`, 20, y);
       y += 10;
       doc.text(`CUIL/CUIT: ${cuil}`, 20, y);
+      y += 10;
+      doc.text(`Correo Electrónico: ${email}`, 20, y);
       y += 10;
       doc.text(`Domicilio Real: ${domicilioReal}`, 20, y);
       y += 10;
@@ -200,12 +212,11 @@
 
       // Nota adicional
       doc.setFontSize(10);
-      doc.text('Formulario, DNI, Título, CUIL', 20, y);
+      doc.text('FORMULARIO, DNI, TÍTULO, CONSTANCIA DE CUIL', 20, y);
       y += 10;
-      doc.text('TODA DOCUMENTACIÓN DEL RESUMEN DEBE SER DIGITALIZADA POR ARCHIVOS', 20, y);
-      y += 10;
-      doc.text('INDIVIDUALES EN PDF Y ENVIADA AL CORREO INSTITUCIONAL: info@apatecno.com.ar', 20, y);
-
+      doc.text('DEBE SER DIGITALIZADA POR ARCHIVOS INDIVIDUALES EN PDF Y ENVIADA AL CORREO INSTITUCIONAL: info@apatecno.com.ar', 20, y);
+      
+      
       // Descargar el PDF
       doc.save('Formulario_Afiliacion_APATecno.pdf');
     }
