@@ -6,6 +6,92 @@
   <title>Noticias - APATecno</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
+  <style>
+    /* Estilos para las tarjetas de noticias */
+    .news-section .news-cards {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      justify-content: center;
+    }
+
+    .news-card {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      max-width: 350px; /* Tamaño máximo de la tarjeta */
+      border: 1px solid #ddd; /* Borde sutil */
+      border-radius: 8px; /* Bordes redondeados */
+      overflow: hidden; /* Evita desbordamiento */
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
+      transition: transform 0.3s ease; /* Animación al pasar el ratón */
+    }
+
+    .news-card:hover {
+      transform: translateY(-5px); /* Efecto de elevación */
+    }
+
+    .news-card img {
+      width: 100%; /* Ocupa todo el ancho */
+      height: 200px; /* Altura fija para consistencia */
+      object-fit: cover; /* Mantiene proporciones, recorta si es necesario */
+      object-position: center; /* Centra la imagen */
+    }
+
+    .news-card .card-body {
+      padding: 1.5rem;
+      flex-grow: 1; /* Permite que el contenido ocupe el espacio disponible */
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .news-card h3 {
+      font-size: 1.25rem;
+      margin-bottom: 0.75rem;
+      color: #333;
+    }
+
+    .news-card p {
+      font-size: 0.9rem;
+      color: #666;
+      flex-grow: 1; /* Permite que el párrafo ocupe espacio */
+      margin-bottom: 1rem;
+    }
+
+    .news-card .btn2 {
+      align-self: flex-start; /* Alinea el botón a la izquierda */
+      padding: 0.5rem 1rem;
+      background-color: #007bff; /* Color institucional */
+      color: white;
+      border-radius: 5px;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+
+    .news-card .btn2:hover {
+      background-color: #0056b3; /* Color más oscuro al pasar el ratón */
+    }
+
+    /* Ajustes para pantallas pequeñas */
+    @media (max-width: 768px) {
+      .news-card {
+        max-width: 100%; /* Ocupa todo el ancho en móviles */
+      }
+
+      .news-card img {
+        height: 150px; /* Altura reducida en móviles */
+      }
+    }
+
+    /* Estilo para mensaje de error */
+    .error-message {
+      text-align: center;
+      color: #dc3545;
+      font-size: 1rem;
+      margin-top: 1rem;
+    }
+  </style>
 </head>
 <body>
 
@@ -24,7 +110,7 @@
           <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
           <li class="nav-item"><a class="nav-link" href="servicios.html">Servicios</a></li>
           <li class="nav-item"><a class="nav-link" href="cursos.html">Cursos</a></li>
-          <li class="nav-item"><a class="nav-link" href="noticias.html">Noticias</a></li>
+          <li class="nav-item"><a class="nav-link active" aria-current="page" href="noticias.html">Noticias</a></li>
           <li class="nav-item"><a class="nav-link" href="nosotros.html">Nosotros</a></li>
           <li class="nav-item"><a class="nav-link" href="contacto.html">Contacto</a></li>
         </ul>
@@ -48,35 +134,65 @@
   async function cargarNoticias() {
     const newsContainer = document.getElementById("newsContainer");
     try {
+      // Cargar noticias.json
       const noticiasResponse = await fetch("noticias/noticias.json");
+      if (!noticiasResponse.ok) {
+        throw new Error(`Error al cargar noticias.json: ${noticiasResponse.status} ${noticiasResponse.statusText}`);
+      }
       const noticiasData = await noticiasResponse.json();
+      if (!noticiasData.noticias || !Array.isArray(noticiasData.noticias)) {
+        throw new Error("Formato inválido en noticias.json: 'noticias' debe ser un array");
+      }
       const noticias = noticiasData.noticias;
 
+      // Verificar si hay noticias
+      if (noticias.length === 0) {
+        newsContainer.innerHTML = '<p class="error-message">No hay noticias disponibles.</p>';
+        return;
+      }
+
+      // Cargar cada noticia
       for (let noticia of noticias) {
-        const response = await fetch(`noticias/${noticia}/info.json`);
-        const data = await response.json();
+        try {
+          const response = await fetch(`noticias/${noticia}/info.json`);
+          if (!response.ok) {
+            throw new Error(`Error al cargar info.json para ${noticia}: ${response.status} ${response.statusText}`);
+          }
+          const data = await response.json();
 
-        const isPDF = data.pdf.trim().toLowerCase().endsWith(".pdf");
-        const botonTexto = isPDF ? "Descargar PDF" : "Ver más";
-        const atributo = isPDF ? 'download' : 'target="_blank"';
+          // Validar datos requeridos
+          if (!data.titulo || !data.descripcion || !data.imagen || !data.pdf) {
+            throw new Error(`Datos incompletos en info.json para ${noticia}`);
+          }
 
-        const newsCard = document.createElement("div");
-        newsCard.classList.add("news-card");
-        newsCard.innerHTML = `
-          <img src="noticias/${noticia}/${data.imagen}" alt="${data.titulo}">
-          <h3>${data.titulo}</h3>
-          <p>${data.descripcion}</p>
-          <a href="${isPDF ? "noticias/" + noticia + "/" + data.pdf : data.pdf}" class="btn2" ${atributo}>${botonTexto}</a>
-        `;
-        newsContainer.appendChild(newsCard);
+          const isPDF = data.pdf.trim().toLowerCase().endsWith(".pdf");
+          const botonTexto = isPDF ? "Descargar PDF" : "Ver más";
+          const atributo = isPDF ? 'download' : 'target="_blank"';
+
+          const newsCard = document.createElement("div");
+          newsCard.classList.add("news-card", "card");
+          newsCard.innerHTML = `
+            <img src="noticias/${noticia}/${data.imagen}" class="card-img-top" alt="${data.titulo}" loading="lazy">
+            <div class="card-body">
+              <h3 class="card-title">${data.titulo}</h3>
+              <p class="card-text">${data.descripcion}</p>
+              <a href="noticias/${noticia}/${data.pdf}" class="btn2" ${atributo}>${botonTexto}</a>
+            </div>
+          `;
+          newsContainer.appendChild(newsCard);
+        } catch (error) {
+          console.error(`Error al procesar noticia ${noticia}:`, error.message);
+          newsContainer.innerHTML += `<p class="error-message">Error al cargar noticia ${noticia}: ${error.message}</p>`;
+        }
       }
     } catch (error) {
-      console.error("Error al cargar las noticias:", error);
+      console.error("Error al cargar las noticias:", error.message);
+      newsContainer.innerHTML = '<p class="error-message">No se pudieron cargar las noticias. Por favor, intenta de nuevo más tarde.</p>';
     }
   }
 
   cargarNoticias();
-</script>
+  </script>
 
   <!-- FOOTER -->
   <footer class="text-center py-4">

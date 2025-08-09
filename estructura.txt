@@ -1,0 +1,32 @@
+Pagina
+├──css
+|  └─ styles.css
+├─images
+├─noticias
+|   └─noticia1
+|   |	└─imagen.jpg
+|   |	└─info.json
+|   |	└─noticia.pdf
+|   └─noticias.json
+├─admin.html
+├─contacto.html
+├─cursos.html
+├─index.html
+├─nosotros.html
+├─noticias.html
+├─servicios.html
+└enviar-mail.php
+
+
+
+└  192
+─  196
+├  195
+
+
+
+
+
+que hacer cuando se produce un conflicto con los pasajes
+
+Pasajes: se produce un conflicto con los pasajes
