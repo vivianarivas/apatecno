@@ -6,6 +6,7 @@
   <title>Afiliación - APATecno</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
+  
 </head>
 <body>
   <!-- NAVBAR -->
@@ -25,6 +26,7 @@
           <li class="nav-item"><a class="nav-link" href="cursos.html">Cursos</a></li>
           <li class="nav-item"><a class="nav-link" href="noticias.html">Noticias</a></li>
           <li class="nav-item"><a class="nav-link" href="nosotros.html">Nosotros</a></li>
+          <li class="nav-item"><a class="nav-link active" aria-current="page" href="afiliacion.html">Afiliación</a></li>
           <li class="nav-item"><a class="nav-link" href="contacto.html">Contacto</a></li>
         </ul>
       </div>
@@ -32,13 +34,75 @@
   </nav>
 
   <!-- CONTENIDO DE AFILIACIÓN -->
-  <section class="container my-5">
-    <h2 class="text-center section-title">Afiliación</h2>
+  <section class="container my-5 affiliation-section">
+    <h2 class="text-center section-title">Afiliación APATecno</h2>
     <p class="text-center">La afiliación está destinada a estudiantes y profesionales de carreras afines a la informática.</p>
     <p class="text-center">Si querés conocer los costos de afiliación y todos los beneficios que ofrecemos, te invitamos a completar el siguiente formulario.</p>
-    <p class="text-center">Una vez completado, el formulario debe ser enviado al correo: <strong>apatecno@gmail.com.ar</strong></p>
-    <div class="text-center mt-4">
-      <a href="docs/formulario_afiliacion.pdf" class="btn btn-main" target="_blank">Completar formulario de afiliación</a>
+
+    <!-- Formulario -->
+    <form id="affiliationForm" class="mt-4">
+      <div class="mb-3">
+        <label for="apellido" class="form-label">Apellido/s *</label>
+        <input type="text" class="form-control" id="apellido" required>
+      </div>
+      <div class="mb-3">
+        <label for="nombre" class="form-label">Nombre/s *</label>
+        <input type="text" class="form-control" id="nombre" required>
+      </div>
+      <div class="mb-3">
+        <label for="dni" class="form-label">Nro de Documento *</label>
+        <input type="number" class="form-control" id="dni" required>
+      </div>
+      <div class="mb-3">
+        <label for="cuil" class="form-label">CUIL/CUIT (Sin guiones, solo números) *</label>
+        <input type="number" class="form-control" id="cuil" required>
+      </div>
+      <div class="mb-3">
+        <label for="domicilioReal" class="form-label">Domicilio Real *</label>
+        <input type="text" class="form-control" id="domicilioReal" required>
+      </div>
+      <div class="mb-3">
+        <label for="domicilioLegal" class="form-label">Domicilio Legal (Opcional)</label>
+        <input type="text" class="form-control" id="domicilioLegal">
+      </div>
+      <div class="mb-3">
+        <label for="telefonoFijo" class="form-label">Teléfono de Contacto (Fijo)</label>
+        <input type="tel" class="form-control" id="telefonoFijo">
+      </div>
+      <div class="mb-3">
+        <label for="telefonoCelular" class="form-label">Teléfono de Contacto (Celular) *</label>
+        <input type="tel" class="form-control" id="telefonoCelular" required>
+      </div>
+      <div class="mb-3">
+        <label for="titulo" class="form-label">Título *</label>
+        <select class="form-select" id="titulo" required>
+          <option value="" disabled selected>Seleccione un título</option>
+          <option value="Ingeniero en Sistemas de Información">Ingeniero en Sistemas de Información</option>
+          <option value="Ingeniero en Informática">Ingeniero en Informática</option>
+          <option value="Ingeniero en Computación">Ingeniero en Computación</option>
+          <option value="Analista Universitario en Sistemas">Analista Universitario en Sistemas</option>
+          <option value="Analista Universitario Informático">Analista Universitario Informático</option>
+          <option value="Analista Universitario en Computación">Analista Universitario en Computación</option>
+          <option value="Licenciado en Informática">Licenciado en Informática</option>
+          <option value="Licenciado en Computación">Licenciado en Computación</option>
+          <option value="Técnico Superior en Programación">Técnico Superior en Programación</option>
+          <option value="Otro">Otro</option>
+        </select>
+      </div>
+      <div class="mb-3" id="otroTituloContainer" style="display: none;">
+        <label for="otroTitulo" class="form-label">Especifique el título</label>
+        <input type="text" class="form-control" id="otroTitulo">
+      </div>
+      <div class="text-center mt-4">
+        <button type="button" class="btn btn-main" onclick="generatePDF()">Descargar Formulario en PDF</button>
+        <button type="reset" class="btn btn-secondary">Limpiar Formulario</button>
+      </div>
+    </form>
+
+    <!-- Nota sobre envío -->
+    <br>
+    <div class="note-section">      
+      <p><strong>FORMULARIO, DNI, TITULO, CONSTANCIA DE CUIL </strong> DEBE SER DIGITALIZADA POR ARCHIVOS INDIVIDUALES EN PDF Y ENVIADA AL CORREO INSTITUCIONAL: <strong>info@apatecno.com.ar</strong></p>
     </div>
   </section>
 
@@ -65,5 +129,86 @@
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script>
+    // Mostrar/esconder el campo "Otro título"
+    document.getElementById('titulo').addEventListener('change', function() {
+      const otroTituloContainer = document.getElementById('otroTituloContainer');
+      if (this.value === 'Otro') {
+        otroTituloContainer.style.display = 'block';
+      } else {
+        otroTituloContainer.style.display = 'none';
+        document.getElementById('otroTitulo').value = ''; // Limpiar el campo
+      }
+    });
+
+    // Generar PDF
+    function generatePDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      // Obtener valores del formulario
+      const apellido = document.getElementById('apellido').value;
+      const nombre = document.getElementById('nombre').value;
+      const dni = document.getElementById('dni').value;
+      const cuil = document.getElementById('cuil').value;
+      const domicilioReal = document.getElementById('domicilioReal').value;
+      const domicilioLegal = document.getElementById('domicilioLegal').value;
+      const telefonoFijo = document.getElementById('telefonoFijo').value;
+      const telefonoCelular = document.getElementById('telefonoCelular').value;
+      const titulo = document.getElementById('titulo').value;
+      const otroTitulo = document.getElementById('otroTitulo').value;
+
+      // Validar campos obligatorios
+      if (!apellido || !nombre || !dni || !cuil || !domicilioReal || !telefonoCelular || !titulo) {
+        alert('Por favor, completa todos los campos obligatorios (*).');
+        return;
+      }
+      if (titulo === 'Otro' && !otroTitulo) {
+        alert('Por favor, especifica el título en el campo "Otro".');
+        return;
+      }
+
+      // Configurar el contenido del PDF
+      doc.setFontSize(16);
+      doc.text('Formulario de Afiliación - APATecno', 20, 20);
+
+      doc.setFontSize(12);
+      let y = 40;
+      doc.text(`Apellido/s: ${apellido}`, 20, y);
+      y += 10;
+      doc.text(`Nombre/s: ${nombre}`, 20, y);
+      y += 10;
+      doc.text(`Nro de Documento: ${dni}`, 20, y);
+      y += 10;
+      doc.text(`CUIL/CUIT: ${cuil}`, 20, y);
+      y += 10;
+      doc.text(`Domicilio Real: ${domicilioReal}`, 20, y);
+      y += 10;
+      if (domicilioLegal) {
+        doc.text(`Domicilio Legal: ${domicilioLegal}`, 20, y);
+        y += 10;
+      }
+      if (telefonoFijo) {
+        doc.text(`Teléfono Fijo: ${telefonoFijo}`, 20, y);
+        y += 10;
+      }
+      doc.text(`Teléfono Celular: ${telefonoCelular}`, 20, y);
+      y += 10;
+      doc.text(`Título: ${titulo === 'Otro' ? otroTitulo : titulo}`, 20, y);
+      y += 20;
+
+      // Nota adicional
+      doc.setFontSize(10);
+      doc.text('Formulario, DNI, Título, CUIL', 20, y);
+      y += 10;
+      doc.text('TODA DOCUMENTACIÓN DEL RESUMEN DEBE SER DIGITALIZADA POR ARCHIVOS', 20, y);
+      y += 10;
+      doc.text('INDIVIDUALES EN PDF Y ENVIADA AL CORREO INSTITUCIONAL: info@apatecno.com.ar', 20, y);
+
+      // Descargar el PDF
+      doc.save('Formulario_Afiliacion_APATecno.pdf');
+    }
+  </script>
 </body>
 </html>

@@ -160,7 +160,7 @@ footer svg:hover {
 ==================== */
 #afiliacion .section-title {
   font-size: 2rem;
-  color: #0a2e4e;
+  color: #0c81ba;
   margin-bottom: 20px;
 }
 
@@ -172,7 +172,7 @@ footer svg:hover {
 }
 
 #afiliacion a.btn-main {
-  background-color: #0c81ba;
+  background-color: #da5a6d;
   color: white;
   padding: 10px 20px;
   border-radius: 8px;
@@ -182,6 +182,70 @@ footer svg:hover {
 #afiliacion a.btn-main:hover {
   background-color: #096392;
   color: white;
+}
+
+#afiliacion .btn-main {
+  background-color: #da5a6d;
+  color: white;
+  border: none;
+}
+
+#afiliacion .btn-main:hover {
+  background-color: #265a92;
+  color: white;
+}
+#afiliacion .btn-secondary {
+  background-color: #6c757d;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+}
+
+#afiliacion .btn-secondary:hover {
+  background-color: #5a6268;
+  color: white;
+}
+
+#afiliacion .btn-secondary:hover {
+  background-color: #5a6268;
+  color: white;
+}
+
+#afiliacion .form-label {
+  font-weight: 600;
+  color: #333;
+}
+
+#afiliacion .form-control, #afiliacion .form-select {
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  padding: 0.75rem;
+}
+
+#afiliacion .form-control:focus, #afiliacion .form-select:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+}
+
+#afiliacion .note-section {
+  background-color: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-top: 2rem;
+  text-align: center;
+}
+
+#afiliacion .note-section p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+#afiliacion .note-section strong {
+  color: #007bff;
 }
 
 /* ====================
